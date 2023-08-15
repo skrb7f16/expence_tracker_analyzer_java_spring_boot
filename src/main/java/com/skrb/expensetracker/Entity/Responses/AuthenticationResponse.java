@@ -1,4 +1,4 @@
-package com.skrb.expensetracker.Entity;
+package com.skrb.expensetracker.Entity.Responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthenticationResponse {
+public class AuthenticationResponse implements JsonResponse {
     private String token;
+    private String username;
 }

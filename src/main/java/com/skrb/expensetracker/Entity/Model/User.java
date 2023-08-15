@@ -1,4 +1,4 @@
-package com.skrb.expensetracker.Entity;
+package com.skrb.expensetracker.Entity.Model;
 
 
 import jakarta.persistence.*;
@@ -22,7 +22,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long user_id;
     @Column(unique = true)
     private String username;
     private String password;
@@ -35,18 +35,18 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + user_id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 
     public long getId() {
-        return id;
+        return user_id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.user_id = id;
     }
 
     @Override

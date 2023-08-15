@@ -1,6 +1,6 @@
 package com.skrb.expensetracker.services;
 
-import com.skrb.expensetracker.Entity.User;
+import com.skrb.expensetracker.Entity.Model.User;
 import com.skrb.expensetracker.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

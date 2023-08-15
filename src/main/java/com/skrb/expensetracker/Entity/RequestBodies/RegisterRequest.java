@@ -1,4 +1,4 @@
-package com.skrb.expensetracker.Entity;
+package com.skrb.expensetracker.Entity.RequestBodies;
 
 
 import lombok.AllArgsConstructor;
