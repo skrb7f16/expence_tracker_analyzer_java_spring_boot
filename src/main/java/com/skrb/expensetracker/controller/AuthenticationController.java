@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     @Autowired
-    private final AuthenticationService authenticationService;
+    private AuthenticationService authenticationService;
 
     @PostMapping("/register")
     public ResponseEntity<JsonResponse> register(
@@ -31,5 +31,10 @@ public class AuthenticationController {
             @RequestBody LoginRequest request
     ){
         return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<JsonResponse> logout() {
+        return ResponseEntity.ok(authenticationService.logout());
     }
 }

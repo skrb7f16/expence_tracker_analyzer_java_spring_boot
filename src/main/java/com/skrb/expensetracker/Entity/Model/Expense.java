@@ -33,5 +33,10 @@ public class Expense {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User by;
+    private ExpenseUser by;
+
+
+    private boolean isDeleted = true;
+
+    private LocalDateTime lastModifiedAt = LocalDateTime.now();
 }

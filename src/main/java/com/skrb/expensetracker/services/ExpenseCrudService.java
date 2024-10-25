@@ -2,11 +2,15 @@ package com.skrb.expensetracker.services;
 
 
 import com.skrb.expensetracker.Entity.Model.Expense;
-import com.skrb.expensetracker.Entity.Model.User;
+import com.skrb.expensetracker.Entity.Model.ExpenseUser;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpenseRequest;
+import com.skrb.expensetracker.Entity.RequestBodies.ExpensebetweenAmountRangeRequest;
+import com.skrb.expensetracker.Entity.RequestBodies.ExpensesInBetweenTimeRequest;
 import com.skrb.expensetracker.Repository.ExpenseRepository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +23,20 @@ import java.util.List;
 @AllArgsConstructor
 public class ExpenseCrudService {
 
-    private final ExpenseRepository expenseRepository;
+    @Autowired
+    private  ExpenseRepository expenseRepository;
 
     public List<Expense> getAllExpenses(){
         Object user= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var res=expenseRepository.findExpensesByBy((User) user);
+        return expenseRepository.findExpensesByBy((ExpenseUser) user);
 
-        return res;
+
     }
 
 
     public String addAnExpense(ExpenseRequest request){
         Object user= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Expense expense=Expense.builder().by((User)user).typeOfExpense(request.getTypeOfExpense()).amount(request.getAmount())
+        Expense expense=Expense.builder().by((ExpenseUser)user).typeOfExpense(request.getTypeOfExpense()).amount(request.getAmount())
                 .reason(request.getReason()).date(LocalDateTime.now()).build();
         expenseRepository.save(expense);
         return "Success";
@@ -51,5 +56,17 @@ public class ExpenseCrudService {
     public String deleteAnExpense(long id){
         expenseRepository.delete(expenseRepository.findById(id).get());
         return "Deleted";
+    }
+
+    public List<Expense> getAllExpensesInBetweenTimeFrame(ExpensesInBetweenTimeRequest request) {
+        Object user= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Expense> expenses = expenseRepository.findExpensesForTimeRange(request.getEarliest(),request.getMin(), (ExpenseUser) user);
+        System.out.println(expenses);
+        return expenses;
+    }
+
+    public  List<Expense> getAllExpensesBetweenAmountRange(ExpensebetweenAmountRangeRequest request){
+        Object user= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return expenseRepository.findExpensesForAmountRange(request.getMin(), request.getMax(), (ExpenseUser) user);
     }
 }

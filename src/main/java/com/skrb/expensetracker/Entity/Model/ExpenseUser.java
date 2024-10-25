@@ -1,6 +1,7 @@
 package com.skrb.expensetracker.Entity.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,12 +20,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User implements UserDetails {
+public class ExpenseUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long user_id;
     @Column(unique = true)
     private String username;
+    @JsonIgnore
     private String password;
     private String first_name;
     private String last_name;
@@ -37,7 +39,7 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + user_id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ",password="+password+ '\''+
                 '}';
     }
 
@@ -85,7 +87,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
 

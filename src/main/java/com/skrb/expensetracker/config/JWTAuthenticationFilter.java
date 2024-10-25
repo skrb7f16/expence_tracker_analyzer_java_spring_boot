@@ -32,17 +32,22 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         String username=null;
         final String jwt;
         if(auth==null || !auth.startsWith("Bearer ")){
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing token");
             filterChain.doFilter(request,response);
             return;
         }
         jwt=auth.substring(7);
         username=jwtService.extractUserName(jwt);
+
         if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetails=this.userDetailsService.loadUserByUsername(username);
             if(jwtService.isTokenValid(jwt,userDetails)){
                 UsernamePasswordAuthenticationToken authToken=new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            }else {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing token");
+                return;
             }
         }
         filterChain.doFilter(request,response);

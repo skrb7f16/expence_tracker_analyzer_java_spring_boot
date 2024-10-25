@@ -2,8 +2,11 @@ package com.skrb.expensetracker.controller;
 
 import com.skrb.expensetracker.Entity.Model.Expense;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpenseRequest;
+import com.skrb.expensetracker.Entity.RequestBodies.ExpensebetweenAmountRangeRequest;
+import com.skrb.expensetracker.Entity.RequestBodies.ExpensesInBetweenTimeRequest;
 import com.skrb.expensetracker.services.ExpenseCrudService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ExpenseCrudController {
 
-    private final ExpenseCrudService expenseCrudService;
+
+    @Autowired
+    private ExpenseCrudService expenseCrudService;
 
     @GetMapping("/get-all-expenses")
     public ResponseEntity<List<Expense>> getAllTheExpenses(){
@@ -36,8 +41,19 @@ public class ExpenseCrudController {
 
     @DeleteMapping("/delete-an-expense/{id}")
     public ResponseEntity<String>deleteAnExpense(@PathVariable long id){
-        System.out.print(id);
+
         return ResponseEntity.ok(expenseCrudService.deleteAnExpense(id));
+    }
+
+    @PostMapping("/get-expense-for-time-frame")
+    public ResponseEntity<List<Expense>> getAllTheExpenseBetweenTime(@RequestBody ExpensesInBetweenTimeRequest request){
+
+        return ResponseEntity.ok(expenseCrudService.getAllExpensesInBetweenTimeFrame(request));
+    }
+
+    @PostMapping("/get-expense-for-amount-range")
+    public ResponseEntity<List<Expense>> getExpenseForAmountRange(@RequestBody ExpensebetweenAmountRangeRequest request){
+        return ResponseEntity.ok(expenseCrudService.getAllExpensesBetweenAmountRange(request));
     }
 
 }

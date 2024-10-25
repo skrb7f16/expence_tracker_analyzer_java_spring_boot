@@ -1,5 +1,6 @@
 package com.skrb.expensetracker.services;
 
+import com.skrb.expensetracker.Entity.Model.ExpenseUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,8 +28,10 @@ public class JWTService {
         return getClaim(token,Claims::getExpiration);
     }
 
-    public String GenerateToken(UserDetails userDetails){
-        return GenerateToken(new HashMap<String,Object>(),userDetails);
+    public String GenerateToken(ExpenseUser userDetails){
+        HashMap<String, Object> extraClaims=new HashMap<String,Object>();
+        extraClaims.put("roles", userDetails.getRole());
+        return GenerateToken(extraClaims,userDetails);
     }
 
     public String GenerateToken(
@@ -39,7 +42,7 @@ public class JWTService {
                 .addClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
+                .setExpiration(new Date(System.currentTimeMillis()+1000000*60*24))
                 .signWith(getSigninKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -60,10 +63,7 @@ public class JWTService {
     }
 
     public Boolean isTokenValid(String token,UserDetails userDetails){
-        if(userDetails.getUsername().equals(this.extractUserName(token)) && !isTokenExpired(token)){
-            return true;
-        }
-        return false;
+        return userDetails.getUsername().equals(this.extractUserName(token)) && !isTokenExpired(token);
     }
 
     public Boolean isTokenExpired(String token){
