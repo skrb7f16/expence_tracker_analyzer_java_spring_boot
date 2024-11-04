@@ -3,6 +3,7 @@ package com.skrb.expensetracker.Repository;
 import com.skrb.expensetracker.Entity.Model.Expense;
 
 import com.skrb.expensetracker.Entity.Model.ExpenseUser;
+import com.skrb.expensetracker.Entity.Model.TypeOfExpense;
 import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,10 @@ import java.util.List;
 public interface ExpenseRepository extends JpaRepository<Expense,Long> {
     List<Expense> findExpensesByBy(ExpenseUser expenseUser);
 
+
+
+
+    List<Expense> findExpensesByByAndTypeOfExpense(ExpenseUser user, TypeOfExpense type);
 
     @Query("select e from Expense e where e.date > ?1 and e.date < ?2")
     List<Expense> findExpensesForTimeRange(LocalDateTime earliest, LocalDateTime min, ExpenseUser user);

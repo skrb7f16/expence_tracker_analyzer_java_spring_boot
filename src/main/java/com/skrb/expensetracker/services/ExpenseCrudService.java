@@ -4,6 +4,7 @@ package com.skrb.expensetracker.services;
 import com.skrb.expensetracker.Entity.Model.Expense;
 import com.skrb.expensetracker.Entity.Model.ExpenseUser;
 import com.skrb.expensetracker.Entity.Model.TypeOfExpense;
+import com.skrb.expensetracker.Entity.RequestBodies.ExpenseFetchByAnyParams;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpenseRequest;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpensebetweenAmountRangeRequest;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpensesInBetweenTimeRequest;
@@ -82,5 +83,15 @@ public class ExpenseCrudService {
             typeWiseMap.put((TypeOfExpense)result.get(0), ((Long) result.get(1)).intValue());
         }
         return typeWiseMap;
+    }
+
+    public List<Expense> getExpenseBasedOnAny(ExpenseFetchByAnyParams request) {
+        Object user= SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        HashMap<String, String> params = request.getParam();
+        if(params.containsKey("type")){
+            TypeOfExpense type  =  TypeOfExpense.valueOf(params.get("type"));
+            return expenseRepository.findExpensesByByAndTypeOfExpense((ExpenseUser) user, type);
+        }
+        return expenseRepository.findExpensesByBy((ExpenseUser) user);
     }
 }

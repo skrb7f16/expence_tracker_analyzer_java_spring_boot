@@ -2,6 +2,7 @@ package com.skrb.expensetracker.controller;
 
 import com.skrb.expensetracker.Entity.Model.Expense;
 import com.skrb.expensetracker.Entity.Model.TypeOfExpense;
+import com.skrb.expensetracker.Entity.RequestBodies.ExpenseFetchByAnyParams;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpenseRequest;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpensebetweenAmountRangeRequest;
 import com.skrb.expensetracker.Entity.RequestBodies.ExpensesInBetweenTimeRequest;
@@ -61,6 +62,11 @@ public class ExpenseCrudController {
     @GetMapping("/get-all-expenses-type-wise")
     public ResponseEntity<HashMap<TypeOfExpense, Integer>> getExpenseTypeWise() {
         return ResponseEntity.ok(expenseCrudService.getAllExpenseTypeWise());
+    }
+
+    @PostMapping("/get-all-expenses")
+    public ResponseEntity<List<Expense>> getAllExpenses(@RequestBody ExpenseFetchByAnyParams request) {
+        return ResponseEntity.ok(expenseCrudService.getExpenseBasedOnAny(request));
     }
 
 }
